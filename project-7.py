@@ -2,14 +2,17 @@
 import sympy
 
 
-def diff_or_min(z1):
-    """This function determines whether a function is a minimum"""
+def diff_or_min_or_max(z1):
+    """This function determines whether a function is a minimum (maximum)"""
 
     mi = z1.find('min')
+    ma = z1.find('max')
     if mi != -1:
-        return(1)
+        return 1
+    if ma != -1:
+        return 2
     else:
-        return(0)
+        return 0
 
 
 def type_diff_f(derivative_x, derivative_y):
@@ -124,7 +127,7 @@ Py = float(input('Введите цену фактора y (в ден. ед./ш�
 I = float(input('Введите предполагаемые затраты на факторы производства (в ден. ед.):'))
 z1 = (input('Введите производственную функцию от x,y (в ед. продукта):'))
 
-di = diff_or_min(z1)
+di = diff_or_min_or_max(z1)
 
 if di == 0:
 
@@ -191,6 +194,33 @@ if di == 1:
     x = y*ratio
     x = round(x, 3)
     y = round(y, 3)
+
+if di == 2:
+    a = parsing_of_string(z1)
+    l_p = a[0]
+    l_p_1 = str(l_p)
+    r_p = a[1]
+    r_p_1 = str(r_p)
+
+    if l_p_1[-1] == 'x':
+        ratio_x = ((l_p)/x)/Px
+        ratio_y = ((r_p)/y)/Py
+    else:
+        ratio_x = ((r_p)/x)/Px
+        ratio_y = ((l_p)/y)/Py
+
+    if ratio_x > ratio_y:
+        y = round(0, 3)
+        x = round(I/Px, 3)
+    if ratio_x < ratio_y:
+        x = round(0, 3)
+        y = round(I/Py, 3)
+    if ratio_x == ratio_y:
+        qx = str(round(I/Px, 3))
+        qy = str(round(I/Py, 3))
+        x = '     ' + qx
+        y = 'либо ' + qy
+
 
 print(x, 'ед. фактора x')
 print(y, 'ед. фактора y')
