@@ -48,13 +48,17 @@ def expression_for_classic_function(derivative_x, derivative_y, Px, Py):
     e_v = sympy.solve(sympy.expr, x)
     ratio = e_v.pop()
     ratio = (ratio/y)
+
     return(ratio)
 
 
-def budget_for_classic_funcnion(I, ratio, Px, Py):
+def budget_for_classic_funcnion(I, ratio, Px, Py, y):
     """This function calculates the budget"""
 
-    y = I/(Py + ratio*Px)
+    sympy.expr = y - I/(Py + ratio*Px)
+    y = sympy.solve(sympy.expr, y)
+    y = y.pop()
+
     return(y)
 
 
@@ -111,6 +115,8 @@ def parsing_of_string(z1):
 
     zf = z1.find('(')
     z1 = z1[(zf + 1):(-1)]
+    zf2 = z1.find(')')
+    z1 = z1[0:zf2]
     v_list = list(z1.split(','))
     l_p = v_list[0]
     l_p = eval(l_p)
@@ -163,8 +169,18 @@ if di == 0:
     if t == 1:
 
         e_v = expression_for_classic_function(derivative_x, derivative_y, Px, Py)
-        y = budget_for_classic_funcnion(I, e_v, Px, Py)
-        x = y * e_v
+        y = budget_for_classic_funcnion(I, e_v, Px, Py, y)
+        y = str(y)
+        y = eval(y)
+
+        sympy.expr = x - e_v*y
+        x = sympy.solve(sympy.expr, x)
+        x = x.pop()
+        x = str(x)
+        x = eval(x)
+
+        print(x)
+        print(y)
         x = round(x, 3)
         y = round(y, 3)
 
@@ -190,7 +206,7 @@ if di == 1:
     e_v = sympy.solve(sympy.expr, x)
     ratio = e_v.pop()
     ratio = ratio/y
-    y = budget_for_classic_funcnion(I, ratio, Px, Py)
+    y = budget_for_classic_funcnion(I, ratio, Px, Py, y)
     x = y*ratio
     x = round(x, 3)
     y = round(y, 3)
@@ -221,6 +237,13 @@ if di == 2:
         x = '     ' + qx
         y = 'либо ' + qy
 
-
+print('')
 print(x, 'ед. фактора x')
 print(y, 'ед. фактора y')
+
+z2 = eval(z1)
+print('')
+print('Q = ', z2)
+
+print('')
+input('Press ENTER to exit')
